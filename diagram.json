@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-breadboard",
+      "id": "bb1",
+      "top": -119.8,
+      "left": -514.4,
+      "rotate": 90,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-arduino-uno",
+      "id": "uno",
+      "top": -233.4,
+      "left": -603.4,
+      "rotate": 90,
+      "attrs": {}
+    },
+    { "type": "wokwi-rgb-led", "id": "rgb1", "top": -341.6, "left": -766.9, "attrs": {} },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": -207.25,
+      "left": 124.8,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": -343.2,
+      "left": 472.2,
+      "attrs": { "volume": "0.1" }
+    },
+    {
+      "type": "wokwi-ntc-temperature-sensor",
+      "id": "ntc1",
+      "top": -496.6,
+      "left": -307.8,
+      "attrs": {}
+    },
+    { "type": "board-ds18b20", "id": "temp1", "top": -471.53, "left": -63.12, "attrs": {} }
+  ],
+  "connections": [
+    [ "ntc1:OUT", "uno:A0", "green", [ "h0" ] ],
+    [ "ntc1:GND", "uno:GND.1", "black", [ "h0" ] ],
+    [ "ntc1:VCC", "uno:3.3V", "red", [ "h0" ] ]
+  ],
+  "dependencies": {}
+}
