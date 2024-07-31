@@ -11,14 +11,7 @@
       "rotate": 90,
       "attrs": {}
     },
-    {
-      "type": "wokwi-arduino-uno",
-      "id": "uno",
-      "top": -183.4,
-      "left": -561.4,
-      "rotate": 180,
-      "attrs": {}
-    },
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": -172.2, "left": -672.6, "attrs": {} },
     {
       "type": "wokwi-rgb-led",
       "id": "rgb1",
@@ -67,8 +60,8 @@
     {
       "type": "wokwi-lcd2004",
       "id": "lcd1",
-      "top": -22.4,
-      "left": 111.2,
+      "top": -32,
+      "left": 159.2,
       "attrs": { "pins": "i2c" }
     }
   ],
@@ -99,7 +92,8 @@
     [ "lcd1:VCC", "bb1:46b.f", "red", [ "h0" ] ],
     [ "bb1:bn.36", "bb1:45b.j", "green", [ "h0" ] ],
     [ "bb1:bp.37", "bb1:46b.j", "red", [ "h0" ] ],
-    [ "lcd1:SDA", "uno:A1", "green", [ "h0" ] ]
+    [ "uno:A4", "lcd1:SDA", "green", [ "v0" ] ],
+    [ "lcd1:SCL", "uno:A5", "green", [ "h0" ] ]
   ],
   "dependencies": {}
 }

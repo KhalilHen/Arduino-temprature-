@@ -1,3 +1,9 @@
+#include <LiquidCrystal.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2); 
+
+
 const float BETA = 3950;  // Beta coefficient for the thermistor
 const float R0 = 10000;   // Resistance of the thermistor at 25°C (10kΩ)
 const float T0 = 298.15;  // Reference temperature (25°C) in Kelvin
@@ -16,9 +22,22 @@ pinMode(redPin,  OUTPUT);
   pinMode(buzzerPin8, OUTPUT);
  pinMode(greenPin, OUTPUT);
   Serial.begin(9600);
+
+
+  lcd.init();
+  lcd.backlight();
+
+
 }
 
+
+
 void loop() {
+
+
+
+ 
+
     unsigned long currentMillis = millis();
 
   int analogValue = analogRead(A0);
@@ -50,17 +69,26 @@ void loop() {
     delay(500);
     noTone(buzzerPin8);
   }
- 
+  lcd.setCursor(0, 0);
+  lcd.print("It's too hot!! try to find some coolness ");
+  delay(1000);
  }
 
   else  {
     digitalWrite(redPin, LOW);
      digitalWrite(greenPin, HIGH);
-
+     lcd.setCursor(0, 0);
+    lcd.print("It's noraml temperature");
+    delay(1000);
     
       }
 
 
   delay(2000); 
+
+
+
+
+
 }
   
