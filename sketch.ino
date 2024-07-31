@@ -2,7 +2,10 @@ const float BETA = 3950;  // Beta coefficient for the thermistor
 const float R0 = 10000;   // Resistance of the thermistor at 25°C (10kΩ)
 const float T0 = 298.15;  // Reference temperature (25°C) in Kelvin
 const float VREF = 5.0;   // Reference voltage
+int buzzerPin1 = 8;
+
 int ledPin = 13;
+int ledPin12 = 12;
 void setup() {
 
 pinMode(ledPin, OUTPUT);
@@ -31,13 +34,19 @@ void loop() {
 
 
   digitalWrite(ledPin, HIGH);
+ digitalWrite(ledPin12, LOW);
 
+
+ 
  }
 
-  else   {
+  else  {
 Serial.println("De lamp moet nu uitgaan");
     digitalWrite(ledPin, LOW);
-  }
+     digitalWrite(ledPin12, HIGH);
+
+    
+      }
 
 
   delay(2000); 
