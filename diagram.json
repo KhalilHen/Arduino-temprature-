@@ -14,8 +14,8 @@
     {
       "type": "wokwi-arduino-uno",
       "id": "uno",
-      "top": -221.8,
-      "left": -743.8,
+      "top": -183.4,
+      "left": -561.4,
       "rotate": 180,
       "attrs": {}
     },
@@ -37,9 +37,9 @@
     {
       "type": "wokwi-buzzer",
       "id": "bz1",
-      "top": 91.5,
-      "left": -309.9,
-      "rotate": 270,
+      "top": 93.3,
+      "left": -149.1,
+      "rotate": 90,
       "attrs": { "volume": "0.1" }
     },
     {
@@ -63,6 +63,13 @@
       "left": -115.75,
       "rotate": 90,
       "attrs": { "value": "0" }
+    },
+    {
+      "type": "wokwi-lcd2004",
+      "id": "lcd1",
+      "top": -22.4,
+      "left": 111.2,
+      "attrs": { "pins": "i2c" }
     }
   ],
   "connections": [
@@ -78,15 +85,21 @@
     [ "rgb1:COM", "bb1:4b.f", "green", [ "v-29.2", "h76.9" ] ],
     [ "rgb2:COM", "bb1:4b.g", "green", [ "v0" ] ],
     [ "uno:12", "bb1:8t.e", "orange", [ "v0" ] ],
-    [ "bz1:1", "bb1:bn.49", "green", [ "h0" ] ],
-    [ "bz1:2", "bb1:bn.50", "green", [ "h0" ] ],
-    [ "rgb2:R", "bb1:2t.c", "green", [ "v0" ] ],
     [ "r1:1", "bb1:16b.g", "", [ "$bb" ] ],
     [ "r1:2", "bb1:22b.g", "", [ "$bb" ] ],
     [ "r3:1", "bb1:2t.a", "", [ "$bb" ] ],
     [ "r3:2", "bb1:8t.a", "", [ "$bb" ] ],
-    [ "bz1:1", "bb1:bn.48", "", [ "$bb" ] ],
-    [ "bz1:2", "bb1:bn.47", "", [ "$bb" ] ]
+    [ "bb1:bn.46", "bb1:57b.j", "green", [ "h0" ] ],
+    [ "bb1:bp.47", "bb1:58b.j", "green", [ "h0" ] ],
+    [ "bz1:1", "bb1:57b.f", "", [ "$bb" ] ],
+    [ "bz1:2", "bb1:58b.f", "", [ "$bb" ] ],
+    [ "uno:8", "bb1:57b.h", "green", [ "v0" ] ],
+    [ "rgb2:G", "r3:1", "green", [ "v0" ] ],
+    [ "lcd1:GND", "bb1:45b.f", "limegreen", [ "h0" ] ],
+    [ "lcd1:VCC", "bb1:46b.f", "red", [ "h0" ] ],
+    [ "bb1:bn.36", "bb1:45b.j", "green", [ "h0" ] ],
+    [ "bb1:bp.37", "bb1:46b.j", "red", [ "h0" ] ],
+    [ "lcd1:SDA", "uno:A1", "green", [ "h0" ] ]
   ],
   "dependencies": {}
 }
