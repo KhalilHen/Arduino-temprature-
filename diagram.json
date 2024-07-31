@@ -11,7 +11,7 @@
       "rotate": 90,
       "attrs": {}
     },
-    { "type": "wokwi-arduino-uno", "id": "uno", "top": -181.8, "left": -682.2, "attrs": {} },
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": -249, "left": -883.8, "attrs": {} },
     {
       "type": "wokwi-rgb-led",
       "id": "rgb1",
@@ -60,8 +60,8 @@
     {
       "type": "wokwi-lcd2004",
       "id": "lcd1",
-      "top": -32,
-      "left": 159.2,
+      "top": 35.2,
+      "left": 197.6,
       "attrs": { "pins": "i2c" }
     },
     {
@@ -74,11 +74,20 @@
     {
       "type": "wokwi-ds1307",
       "id": "rtc1",
-      "top": -119.9,
-      "left": -367.6,
+      "top": -158.3,
+      "left": -358,
       "rotate": 270,
       "attrs": {}
-    }
+    },
+    {
+      "type": "wokwi-arduino-mega",
+      "id": "mega1",
+      "top": -414.4,
+      "left": 141.4,
+      "rotate": 90,
+      "attrs": {}
+    },
+    { "type": "board-cd74hc4067", "id": "mux1", "top": -138.75, "left": -436.91, "attrs": {} }
   ],
   "connections": [
     [ "ntc1:OUT", "uno:A0", "green", [ "h0" ] ],
@@ -107,11 +116,9 @@
     [ "lcd1:VCC", "bb1:46b.f", "red", [ "h0" ] ],
     [ "bb1:bn.36", "bb1:45b.j", "green", [ "h0" ] ],
     [ "bb1:bp.37", "bb1:46b.j", "red", [ "h0" ] ],
-    [ "uno:A4", "lcd1:SDA", "green", [ "v0" ] ],
-    [ "lcd1:SCL", "uno:A5", "green", [ "h0" ] ],
-    [ "rtc1:GND", "bb1:45b.i", "green", [ "v38.4", "h144" ] ],
     [ "bb1:bp.35", "bb1:43b.j", "red", [ "h0" ] ],
-    [ "rtc1:5V", "bb1:43b.i", "red", [ "v0" ] ]
+    [ "lcd1:SDA", "uno:A2", "green", [ "h0" ] ],
+    [ "lcd1:SCL", "uno:A3", "green", [ "h0" ] ]
   ],
   "dependencies": {}
 }
