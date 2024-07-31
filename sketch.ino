@@ -23,13 +23,16 @@ void loop() {
   // Convert temperature from Kelvin to Celsius
   float temperatureC = temperatureK - 273.15;
 
-  // Output the temperature to the Serial Monitor
   Serial.print("Temperature: ");
   Serial.println(temperatureC);
 
 
- if (temperatureC  >= 26)
+ if (temperatureC  >= 26) {
+
+
   digitalWrite(ledPin, HIGH);
+
+ }
 
   else   {
 Serial.println("De lamp moet nu uitgaan");
@@ -37,6 +40,6 @@ Serial.println("De lamp moet nu uitgaan");
   }
 
 
-  delay(2000); // Wait 2 seconds before taking another reading
+  delay(2000); 
 }
   
