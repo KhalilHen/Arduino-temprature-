@@ -1,5 +1,10 @@
 #include <LiquidCrystal.h>
 #include <LiquidCrystal_I2C.h>
+#include "RTClib.h"
+
+RTC_DS1307 rtc;
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
 
 LiquidCrystal_I2C lcd(0x27, 16, 2); 
 
@@ -19,24 +24,50 @@ int textMonitor = A1;
 void setup() {
 
 pinMode(redPin,  OUTPUT);
+// Buzzer
   pinMode(buzzerPin8, OUTPUT);
  pinMode(greenPin, OUTPUT);
   Serial.begin(9600);
 
-
+//Code for Display text LCD
   lcd.init();
   lcd.backlight();
 
 
+//Code for the clock RTC
+//  if (! rtc.begin()) {
+//     Serial.println("Couldn't find RTC");
+//     Serial.flush();
+//     abort();
+//   }
 }
 
 
 
 void loop() {
 
+//Code for clock
+  DateTime now = rtc.now();
+
+   Serial.print("Current time: ");
+  Serial.print(now.year(), DEC);
+  Serial.print('/');
+  Serial.print(now.month(), DEC);
+  Serial.print('/');
+  Serial.print(now.day(), DEC);
+  Serial.print(" (");
+  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
+  Serial.print(") ");
+  Serial.print(now.hour(), DEC);
+  Serial.print(':');
+  Serial.print(now.minute(), DEC);
+  Serial.print(':');
+  Serial.print(now.second(), DEC);
+  Serial.println();
 
 
- 
+  Serial.println();
+  delay(3000);
 
     unsigned long currentMillis = millis();
 
@@ -69,17 +100,19 @@ void loop() {
     delay(500);
     noTone(buzzerPin8);
   }
-  lcd.setCursor(0, 0);
-  lcd.print("It's too hot!! try to find some coolness ");
-  delay(1000);
+   lcd.setCursor(0, 0);
+    lcd.print("It's too hot!!");
+    lcd.setCursor(0, 1);
+    lcd.print("Find some coolness");
  }
 
   else  {
     digitalWrite(redPin, LOW);
      digitalWrite(greenPin, HIGH);
-     lcd.setCursor(0, 0);
-    lcd.print("It's noraml temperature");
-    delay(1000);
+
+     lcd.clear();
+      lcd.setCursor(0, 0);
+    lcd.print("Normal temperature");
     
       }
 

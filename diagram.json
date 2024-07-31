@@ -11,7 +11,7 @@
       "rotate": 90,
       "attrs": {}
     },
-    { "type": "wokwi-arduino-uno", "id": "uno", "top": -172.2, "left": -672.6, "attrs": {} },
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": -181.8, "left": -682.2, "attrs": {} },
     {
       "type": "wokwi-rgb-led",
       "id": "rgb1",
@@ -63,6 +63,21 @@
       "top": -32,
       "left": 159.2,
       "attrs": { "pins": "i2c" }
+    },
+    {
+      "type": "wokwi-7segment",
+      "id": "sevseg1",
+      "top": -810.18,
+      "left": -363.68,
+      "attrs": { "digits": "4" }
+    },
+    {
+      "type": "wokwi-ds1307",
+      "id": "rtc1",
+      "top": -119.9,
+      "left": -367.6,
+      "rotate": 270,
+      "attrs": {}
     }
   ],
   "connections": [
@@ -93,7 +108,10 @@
     [ "bb1:bn.36", "bb1:45b.j", "green", [ "h0" ] ],
     [ "bb1:bp.37", "bb1:46b.j", "red", [ "h0" ] ],
     [ "uno:A4", "lcd1:SDA", "green", [ "v0" ] ],
-    [ "lcd1:SCL", "uno:A5", "green", [ "h0" ] ]
+    [ "lcd1:SCL", "uno:A5", "green", [ "h0" ] ],
+    [ "rtc1:GND", "bb1:45b.i", "green", [ "v38.4", "h144" ] ],
+    [ "bb1:bp.35", "bb1:43b.j", "red", [ "h0" ] ],
+    [ "rtc1:5V", "bb1:43b.i", "red", [ "v0" ] ]
   ],
   "dependencies": {}
 }
