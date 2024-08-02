@@ -60,8 +60,8 @@
     {
       "type": "wokwi-lcd2004",
       "id": "lcd1",
-      "top": 35.2,
-      "left": 197.6,
+      "top": -32,
+      "left": 159.2,
       "attrs": { "pins": "i2c" }
     },
     {
@@ -80,14 +80,22 @@
       "attrs": {}
     },
     {
+      "type": "board-cd74hc4067",
+      "id": "mux1",
+      "top": -24.79,
+      "left": -621.25,
+      "rotate": 270,
+      "attrs": {}
+    },
+    {
       "type": "wokwi-arduino-mega",
       "id": "mega1",
       "top": -414.4,
-      "left": 141.4,
+      "left": 189.4,
       "rotate": 90,
       "attrs": {}
     },
-    { "type": "board-cd74hc4067", "id": "mux1", "top": -138.75, "left": -436.91, "attrs": {} }
+    { "type": "board-cd74hc4067", "id": "mux2", "top": -42.75, "left": -494.51, "attrs": {} }
   ],
   "connections": [
     [ "ntc1:OUT", "uno:A0", "green", [ "h0" ] ],
@@ -102,23 +110,40 @@
     [ "rgb1:COM", "bb1:4b.f", "green", [ "v-29.2", "h76.9" ] ],
     [ "rgb2:COM", "bb1:4b.g", "green", [ "v0" ] ],
     [ "uno:12", "bb1:8t.e", "orange", [ "v0" ] ],
-    [ "r1:1", "bb1:16b.g", "", [ "$bb" ] ],
-    [ "r1:2", "bb1:22b.g", "", [ "$bb" ] ],
-    [ "r3:1", "bb1:2t.a", "", [ "$bb" ] ],
-    [ "r3:2", "bb1:8t.a", "", [ "$bb" ] ],
     [ "bb1:bn.46", "bb1:57b.j", "green", [ "h0" ] ],
     [ "bb1:bp.47", "bb1:58b.j", "green", [ "h0" ] ],
-    [ "bz1:1", "bb1:57b.f", "", [ "$bb" ] ],
-    [ "bz1:2", "bb1:58b.f", "", [ "$bb" ] ],
     [ "uno:8", "bb1:57b.h", "green", [ "v0" ] ],
     [ "rgb2:G", "r3:1", "green", [ "v0" ] ],
     [ "lcd1:GND", "bb1:45b.f", "limegreen", [ "h0" ] ],
     [ "lcd1:VCC", "bb1:46b.f", "red", [ "h0" ] ],
     [ "bb1:bn.36", "bb1:45b.j", "green", [ "h0" ] ],
     [ "bb1:bp.37", "bb1:46b.j", "red", [ "h0" ] ],
+    [ "rtc1:GND", "bb1:45b.i", "green", [ "v38.4", "h144" ] ],
     [ "bb1:bp.35", "bb1:43b.j", "red", [ "h0" ] ],
-    [ "lcd1:SDA", "uno:A2", "green", [ "h0" ] ],
-    [ "lcd1:SCL", "uno:A3", "green", [ "h0" ] ]
+    [ "rtc1:5V", "bb1:43b.i", "red", [ "v0" ] ],
+    [ "r1:1", "bb1:16b.g", "", [ "$bb" ] ],
+    [ "r1:2", "bb1:22b.g", "", [ "$bb" ] ],
+    [ "bz1:1", "bb1:57b.f", "", [ "$bb" ] ],
+    [ "bz1:2", "bb1:58b.f", "", [ "$bb" ] ],
+    [ "r3:1", "bb1:2t.a", "", [ "$bb" ] ],
+    [ "r3:2", "bb1:8t.a", "", [ "$bb" ] ],
+    [ "mux1:GND", "uno:GND.2", "black", [ "v-9.63", "h-96" ] ],
+    [ "mux1:VCC", "bb1:bp.40", "red", [ "v-28.83", "h86.4", "v48", "h220.8", "v-9.6" ] ],
+    [ "uno:A4", "mux1:I15", "green", [ "v57.5", "h-24.6" ] ],
+    [ "uno:A5", "mux1:I14", "green", [ "v67.1", "h-24.5" ] ],
+    [ "mux2:VCC", "bb1:bp.42", "red", [ "h0" ] ],
+    [ "mux2:GND", "bb1:bp.43", "black", [ "h0" ] ],
+    [ "mux1:S0", "mux2:I15", "green", [ "v0" ] ],
+    [ "mux1:S1", "mux2:I14", "green", [ "v0" ] ],
+    [ "lcd1:SDA", "mux1:S2", "cyan", [ "h-576", "v-95.8", "h-172.8", "v38.4", "h-28.8" ] ],
+    [
+      "lcd1:SCL",
+      "mux1:S3",
+      "cyan",
+      [ "h-566.4", "v-182.1", "h-201.6", "v67.2", "h-9.6", "v38.4" ]
+    ],
+    [ "rtc1:SDA", "mux2:S0", "green", [ "v0" ] ],
+    [ "rtc1:SCL", "mux2:S1", "green", [ "v0" ] ]
   ],
   "dependencies": {}
 }
