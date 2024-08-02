@@ -1,137 +1,157 @@
-#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include "RTClib.h"
+#include <RTClib.h>
+#include <Wire.h>
+#include <SevSeg.h>
 
-// Define multiplexer control pins
-const int s0 = 2;  // Control pins for CD74HC4067
-const int s1 = 3;
-const int s2 = 4;
-const int s3 = 5;
 
-// Define channel numbers
-#define LCD_CHANNEL 2   // Channel for the LCD
-#define RTC_CHANNEL 3   // Channel for the RTC
+// Pins fRTC_DS1307 rtc;
 
 RTC_DS1307 rtc;
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
 LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+const int COLON_PIN = 13;
+
+const int digitPins[] = {2, 3, 4, 5}; // Pins connected to each digit's common pin
+const int segmentPins[] = {6, 7, 8, 9, 10, 11, 12}; // Pins connected to segments a-g
+
+const byte digitPatterns[] = {
+  0b00111111, // 0
+  0b00000110, // 1
+  0b01011011, // 2
+  0b01001111, // 3
+  0b01100110, // 4
+  0b01101101, // 5
+  0b01111101, // 6
+  0b00000111, // 7
+  0b01111111, // 8
+  0b01101111  // 9
+};
+
+// Initialize RTC and LCD
+RTC_DS1307 rtc;
+LiquidCrystal_I2C lcd(0x27, 16, 2); // Adjust address and size if needed
 
 const float BETA = 3950;  // Beta coefficient for the thermistor
 const float R0 = 10000;   // Resistance of the thermistor at 25°C (10kΩ)
 const float T0 = 298.15;  // Reference temperature (25°C) in Kelvin
 const float VREF = 5.0;   // Reference voltage
-int buzzerPin8 = 8;
+
+int buzzerPin = 8;
 unsigned long previousMillis = 0;
 const long interval = 60000;
 int redPin = 13;
 int greenPin = 12;
-int textMonitor = A1;
-
-// Function to select a channel on the CD74HC4067 multiplexer
-void selectChannel(int channel) {
-  digitalWrite(s0, channel & 0x01);
-  digitalWrite(s1, (channel >> 1) & 0x01);
-  digitalWrite(s2, (channel >> 2) & 0x01);
-  digitalWrite(s3, (channel >> 3) & 0x01);
-}
 
 void setup() {
-  pinMode(s0, OUTPUT);
-  pinMode(s1, OUTPUT);
-  pinMode(s2, OUTPUT);
-  pinMode(s3, OUTPUT);
-  
-  pinMode(redPin, OUTPUT);
-  pinMode(buzzerPin8, OUTPUT);
-  pinMode(greenPin, OUTPUT);
-  
-  Serial.begin(9600);
+    Serial.begin(9600);
 
-  // Initialize the I2C bus
-  Wire.begin();
+    // Set pin modes for 7-segment display
+    for (int i = 0; i < 7; i++) {
+        pinMode(segmentPins[i], OUTPUT);
+    }
+    for (int i = 0; i < 4; i++) {
+        pinMode(digitPins[i], OUTPUT);
+    }
 
-  // Initialize the multiplexer control pins to 0
-  selectChannel(LCD_CHANNEL);
-  lcd.init();
-  lcd.backlight();
+    pinMode(redPin, OUTPUT);
+    pinMode(buzzerPin, OUTPUT);
+    pinMode(greenPin, OUTPUT);
 
-  // Initialize RTC
-  selectChannel(RTC_CHANNEL);
-  if (!rtc.begin()) {
-    Serial.println("Couldn't find RTC");
-    Serial.flush();
-    abort();
-  }
+    // Initialize LCD
+    lcd.init();
+    lcd.backlight();
+
+    // Initialize RTC
+    if (!rtc.begin()) {
+        Serial.println("Couldn't find RTC");
+        while (1); // Halt execution
+    }
+
+   
 }
 
 void loop() {
-  // Select the channel for the RTC and get the time
-  selectChannel(RTC_CHANNEL);
-  DateTime now = rtc.now();
+    DateTime now = rtc.now();
 
-  Serial.print("Current time: ");
-  Serial.print(now.year(), DEC);
-  Serial.print('/');
-  Serial.print(now.month(), DEC);
-  Serial.print('/');
-  Serial.print(now.day(), DEC);
-  Serial.print(" (");
-  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
-  Serial.print(") ");
-  Serial.print(now.hour(), DEC);
-  Serial.print(':');
-  Serial.print(now.minute(), DEC);
-  Serial.print(':');
-  Serial.print(now.second(), DEC);
-  Serial.println();
+    // Display hours and minutes on 7-segment display
+    int hours = now.hour();
+    int minutes = now.minute();
 
-  Serial.println();
-  delay(3000);
+    int digits[] = {
+        hours / 10,  // Tens place of hours
+        hours % 10,  // Units place of hours
+        minutes / 10,  // Tens place of minutes
+        minutes % 10   // Units place of minutes
+    };
 
-  unsigned long currentMillis = millis();
-
-  int analogValue = analogRead(A0);
-  float voltage = (analogValue / 1023.0) * VREF;  // Convert ADC value to voltage
-
-  // Simplified resistance calculation assuming no reference resistor
-  float resistance = (VREF / voltage - 1) * 10000;  // Approximate the thermistor resistance
-
-  // Calculate temperature in Kelvin using the Beta parameter
-  float temperatureK = 1 / (log(resistance / R0) / BETA + 1 / T0);
-
-  // Convert temperature from Kelvin to Celsius
-  float temperatureC = temperatureK - 273.15;
-
-  Serial.print("Temperature: ");
-  Serial.println(temperatureC);
-
-  if (temperatureC >= 26) {
-    digitalWrite(redPin, HIGH);
-    digitalWrite(greenPin, LOW);
-
-    if (currentMillis - previousMillis >= interval) {
-      previousMillis = currentMillis;
-      noTone(buzzerPin8);
-      delay(500);
+    // Display the time on 7-segment display
+    for (int i = 0; i < 4; i++) {
+        displayDigit(digits[i], i);
+        delay(5); // Adjust delay for multiplexing speed
     }
 
-    // Select the channel for the LCD and update it
-    selectChannel(LCD_CHANNEL);
-    lcd.setCursor(0, 0);
-    lcd.print("It's too hot!!");
-    lcd.setCursor(0, 1);
-    lcd.print("Find some coolness");
-  } else {
-    digitalWrite(redPin, LOW);
-    digitalWrite(greenPin, HIGH);
+    // Temperature monitoring
+    int analogValue = analogRead(A0);
+    float voltage = (analogValue / 1023.0) * VREF;  // Convert ADC value to voltage
+    float resistance = (VREF / voltage - 1) * R0;  // Calculate resistance
+    float temperatureK = 1 / (log(resistance / R0) / BETA + 1 / T0);
+    float temperatureC = temperatureK - 273.15;
 
-    // Select the channel for the LCD and update it
-    selectChannel(LCD_CHANNEL);
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Normal temperature");
-  }
+    Serial.print("Temperature: ");
+    Serial.println(temperatureC);
 
-  delay(2000); 
+    // Temperature-based control
+    unsigned long currentMillis = millis();
+    if (temperatureC >= 26) {
+        digitalWrite(redPin, HIGH);
+        digitalWrite(greenPin, LOW);
+
+        if (currentMillis - previousMillis >= interval) {
+            previousMillis = currentMillis;
+            tone(buzzerPin, 1000);
+            delay(500);
+            noTone(buzzerPin);
+        }
+
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Too hot! Temp:");
+        lcd.setCursor(0, 1);
+        lcd.print(temperatureC, 1); // Display temperature with 1 decimal place
+        lcd.print(" C");
+    } else {
+        digitalWrite(redPin, LOW);
+        digitalWrite(greenPin, HIGH);
+
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Temperature:");
+        lcd.setCursor(0, 1);
+        lcd.print(temperatureC, 1); // Display temperature with 1 decimal place
+        lcd.print(" C");
+    }
+
+    delay(2000); // Delay to update LCD less frequently
+}
+
+void displayDigit(int digit, int position) {
+    // Turn off all digits
+    for (int i = 0; i < 4; i++) {
+        digitalWrite(digitPins[i], LOW);
+    }
+
+    // Set the digit pattern
+    byte pattern = digitPatterns[digit];
+    for (int i = 0; i < 7; i++) {
+        digitalWrite(segmentPins[i], (pattern & (1 << i)) ? HIGH : LOW);
+    }
+
+    // Turn on the selected digit
+    digitalWrite(digitPins[position], HIGH);
+
+    // Debug output
+    Serial.print("Displaying digit: ");
+    Serial.print(digit);
+    Serial.print(" on position: ");
+    Serial.println(position);
 }
