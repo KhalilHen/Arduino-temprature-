@@ -57,13 +57,6 @@
       "attrs": { "pins": "i2c" }
     },
     {
-      "type": "wokwi-7segment",
-      "id": "sevseg1",
-      "top": -848.58,
-      "left": -526.88,
-      "attrs": { "digits": "4", "colon": "1", "common": "anode" }
-    },
-    {
       "type": "wokwi-ds1307",
       "id": "rtc1",
       "top": -158.3,
@@ -85,6 +78,13 @@
       "top": -669.4,
       "left": -567,
       "attrs": {}
+    },
+    {
+      "type": "wokwi-7segment",
+      "id": "sevseg1",
+      "top": -925.38,
+      "left": -661.28,
+      "attrs": { "digits": "4", "colon": "1" }
     }
   ],
   "connections": [
@@ -105,8 +105,6 @@
     [ "rtc1:5V", "bb1:43b.i", "red", [ "v0" ] ],
     [ "mega1:5V", "bb1:bp.1", "red", [ "h-27.3", "v-173.7", "h249.6" ] ],
     [ "mega1:GND.2", "bb1:bn.1", "green", [ "h233.1", "v107.75", "h268.8", "v19.2" ] ],
-    [ "mega1:12", "bb1:8t.e", "gold", [ "h76.8", "v192", "h192", "v28.8" ] ],
-    [ "mega1:8", "bb1:57b.i", "orange", [ "h9.6", "v690.6" ] ],
     [ "lcd1:SDA", "mega1:20", "gold", [ "h-556.8", "v-191.8", "h-182.4", "v-211.2" ] ],
     [ "lcd1:SCL", "mega1:21", "gold", [ "h-700.8", "v-114.9" ] ],
     [ "rtc1:SDA", "mega1:SDA", "gray", [ "v0" ] ],
@@ -116,29 +114,23 @@
     [ "bb1:bn.6", "bb1:7b.i", "green", [ "h0" ] ],
     [ "ntc1:OUT", "mega1:A0", "green", [ "h-268.8", "v-230.5", "h-336", "v76.8" ] ],
     [ "bb1:bn.2", "bb1:3b.i", "green", [ "h20.5", "v-10.4" ] ],
-    [ "sevseg1:DIG1", "mega1:A2", "blue", [ "v0", "h-566.39", "v268.8", "h28.8" ] ],
-    [ "sevseg1:DIG2", "mega1:A3", "blue", [ "v-19.2", "h-633.6", "v326.4" ] ],
-    [ "sevseg1:DIG3", "mega1:A4", "blue", [ "v-38.4", "h-691.2", "v316.8", "h9.6", "v9.6" ] ],
-    [
-      "sevseg1:DIG4",
-      "mega1:A5",
-      "blue",
-      [ "v37.56", "h-144", "v-172.8", "h-374.4", "v19.2", "h-230.4", "v384", "h201.6", "v-38.4" ]
-    ],
-    [ "sevseg1:B", "mega1:A7", "white", [ "v-144", "h-825.6", "v528", "h326.4", "v-67.2" ] ],
-    [ "sevseg1:C", "mega1:A8", "white", [ "v-250.44", "h-835.2", "v595.2", "h364.8", "v-9.6" ] ],
-    [ "sevseg1:D", "mega1:A9", "white", [ "v-317.64", "h-902.4", "v681.6", "h470.4", "v-19.2" ] ],
-    [ "sevseg1:E", "mega1:A10", "white", [ "v37.56", "h-172.79", "v326.4", "h-240", "v-76.8" ] ],
-    [ "sevseg1:F", "mega1:A11", "white", [ "v0" ] ],
-    [ "sevseg1:G", "mega1:A12", "white", [ "v0" ] ],
-    [ "sevseg1:A", "mega1:A6", "white", [ "v-67.2", "h-499.2", "v364.8" ] ],
-    [ "mega1:11", "bb1:22b.j", "gold", [ "h38.4", "v18.8" ] ],
     [ "r1:1", "bb1:16b.g", "", [ "$bb" ] ],
     [ "r1:2", "bb1:22b.g", "", [ "$bb" ] ],
     [ "r3:1", "bb1:2t.a", "", [ "$bb" ] ],
     [ "r3:2", "bb1:8t.a", "", [ "$bb" ] ],
-    [ "mega1:13", "sevseg1:CLN", "cyan", [ "h57.6", "v-259.8", "h355.2" ] ],
-    [ "sevseg1:COM", "mega1:GND.1", "green", [ "v18.36", "h-364.8", "v48" ] ]
+    [ "sevseg1:DIG1", "mega1:2", "green", [ "v0" ] ],
+    [ "sevseg1:DIG2", "mega1:3", "green", [ "v0" ] ],
+    [ "sevseg1:DIG3", "mega1:4", "green", [ "v0" ] ],
+    [ "sevseg1:DIG4", "mega1:5", "green", [ "v8.76", "h-172.8", "v-57.6" ] ],
+    [ "sevseg1:A", "mega1:6", "green", [ "v0" ] ],
+    [ "sevseg1:B", "mega1:7", "green", [ "v0" ] ],
+    [ "sevseg1:C", "mega1:8", "green", [ "v-87.24", "h-144" ] ],
+    [ "sevseg1:D", "mega1:9", "green", [ "v0" ] ],
+    [ "sevseg1:E", "mega1:10", "green", [ "v0" ] ],
+    [ "sevseg1:F", "mega1:11", "green", [ "v0" ] ],
+    [ "sevseg1:G", "mega1:12", "green", [ "v0" ] ],
+    [ "sevseg1:CLN", "mega1:13", "green", [ "h9.6", "v-57.6" ] ],
+    [ "sevseg1:COM", "mega1:5V.2", "green", [ "v0" ] ]
   ],
   "dependencies": {}
 }

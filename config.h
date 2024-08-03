@@ -13,7 +13,7 @@
 /**
    Change to 0 for running without an external RTC (Real time clock)
 */
-#define USE_RTC 1
+#define USE_RTC 0
 
 /**
    Your 7-Segment display type: COMMON_ANODE or COMMON_CATHODE

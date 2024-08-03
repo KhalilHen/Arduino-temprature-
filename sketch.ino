@@ -7,19 +7,15 @@
 */
 
 #include <SevSeg.h>
-#include "Button.h"
-#include "AlarmTone.h"
+// #include "Button.h"
+// #include "AlarmTone.h"
 #include "Clock.h"
 #include "config.h"
 
 const int COLON_PIN = 13;
-// const int SPEAKER_PIN = A3;
+const int SPEAKER_PIN = A3;
 
-// Button hourButton(A0);
-// Button minuteButton(A1);
-// Button alarmButton(A2);
 
-// AlarmTone alarmTone;
 Clock clock;
 SevSeg sevseg;
 
@@ -34,10 +30,10 @@ enum DisplayState {
 DisplayState displayState = DisplayClock;
 long lastStateChange = 0;
 
-// void changeDisplayState(DisplayState newValue) {
-//   displayState = newValue;
-//   lastStateChange = millis();
-// }
+void changeDisplayState(DisplayState newValue) {
+  displayState = newValue;
+  lastStateChange = millis();
+}
 
 long millisSinceStateChange() {
   return millis() - lastStateChange;
@@ -54,36 +50,21 @@ void displayTime() {
   setColon(blinkState);
 }
 
-// void clockState() {
-//   displayTime();
+void clockState() {
+  displayTime();
 
-//   if (alarmButton.read() == Button::RELEASED && clock.alarmActive()) {
-//     // Read alarmButton has_changed() to clear its state
-//     alarmButton.has_changed();
-//     changeDisplayState(DisplayAlarmActive);
-//     return;
-//   }
+  
+  
+}
 
-//   if (hourButton.pressed()) {
-//     clock.incrementHour();
-//   }
-//   if (minuteButton.pressed()) {
-//     clock.incrementMinute();
-//   }
-//   if (alarmButton.pressed()) {
-//     clock.toggleAlarm();
-//     changeDisplayState(DisplayAlarmStatus);
-//   }
-// }
-
-// void alarmStatusState() {
-//   setColon(false);
-//   sevseg.setChars(clock.alarmEnabled() ? " on" : " off");
-//   if (millisSinceStateChange() > ALARM_STATUS_DISPLAY_TIME) {
-//     changeDisplayState(clock.alarmEnabled() ? DisplayAlarmTime : DisplayClock);
-//     return;
-//   }
-// }
+void alarmStatusState() {
+  setColon(false);
+  sevseg.setChars(clock.alarmEnabled() ? " on" : " off");
+  if (millisSinceStateChange() > ALARM_STATUS_DISPLAY_TIME) {
+    changeDisplayState(clock.alarmEnabled() ? DisplayAlarmTime : DisplayClock);
+    return;
+  }
+}
 
 // void alarmTimeState() {
 //   DateTime alarm = clock.alarmTime();
@@ -107,8 +88,8 @@ void displayTime() {
 //   }
 // }
 
-// void alarmState() {
-//   displayTime();
+void alarmState() {
+  displayTime();
 
   // if (alarmButton.read() == Button::RELEASED) {
   //   alarmTone.play();
@@ -127,31 +108,21 @@ void displayTime() {
   //     changeDisplayState(DisplaySnooze);
   //   }
   // }
-// }
+}
 
-// void snoozeState() {
-//   sevseg.setChars("****");
-//   if (millisSinceStateChange() > SNOOZE_DISPLAY_TIME) {
-//     changeDisplayState(DisplayClock);
-//     return;
-//   }
-// }
+void snoozeState() {
+  sevseg.setChars("****");
+  if (millisSinceStateChange() > SNOOZE_DISPLAY_TIME) {
+    changeDisplayState(DisplayClock);
+    return;
+  }
+}
 
 void setup() {
   Serial.begin(115200);
 
   clock.begin();
 
-  // hourButton.begin();
-  // hourButton.set_repeat(500, 200);
-
-  // minuteButton.begin();
-  // minuteButton.set_repeat(500, 200);
-
-  // alarmButton.begin();
-  // alarmButton.set_repeat(1000, -1);
-
-  // alarmTone.begin(SPEAKER_PIN);
 
   pinMode(COLON_PIN, OUTPUT);
 
@@ -170,25 +141,15 @@ void setup() {
 void loop() {
   sevseg.refreshDisplay();
 
-  // switch (displayState) {
-  //   case DisplayClock:
-  //     clockState();
-  //     break;
+  switch (displayState) {
+    case DisplayClock:
+      clockState();
+      break;
 
-    // case DisplayAlarmStatus:
-    //   alarmStatusState();
-    //   break;
 
-    // case DisplayAlarmTime:
-    //   alarmTimeState();
-    //   break;
 
-    // case DisplayAlarmActive:
-    //   alarmState();
-    //   break;
 
-    // case DisplaySnooze:
-    //   snoozeState();
-    //   break;
-  // }
+
+   
+  }
 }
