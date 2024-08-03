@@ -4,13 +4,7 @@
 #include <RTClib.h>
 #include "config.h"
 
-enum AlarmState {
-  ALARM_DISABLED,
-  ALARM_OFF,
-  ALARM_ACTIVE,
-  ALARM_SNOOZED,
-  ALARM_STOPPED,
-};
+
 
 class Clock {
 public:
@@ -23,12 +17,6 @@ public:
   void incrementHour();
 
   /* Alarm Management */
-  bool alarmEnabled();
-  DateTime alarmTime();
-  bool alarmActive();
-  void toggleAlarm();
-  void snooze();
-  void stopAlarm();
   void incrementAlarmHour();
   void incrementAlarmMinute();
 
@@ -41,10 +29,6 @@ protected:
     RTC_Millis _rtc;
   #endif /* USE_RTC */
 
-  byte _alarm_hour;
-  byte _alarm_minute;
-  AlarmState _alarm_state;
-  unsigned long _alarm_snooze_time;
-};
+  };
 
 #endif /* __CLOCK_H__ */

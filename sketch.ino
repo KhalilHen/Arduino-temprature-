@@ -1,141 +1,67 @@
-/**
-   Arduino Digital Alarm Clock
-
-   Copyright (C) 2020, Uri Shaked.
-   Released under the MIT License.
-
-*/
-
+//Clock includes
 #include <SevSeg.h>
-// #include "Button.h"
-// #include "AlarmTone.h"
+
 #include "Clock.h"
 #include "config.h"
+#include "DisplayControl.h"
 
-const int COLON_PIN = 13;
-const int SPEAKER_PIN = A3;
+#include <LiquidCrystal_I2C.h>
+#include <RTClib.h> 
+#include <Wire.h>
 
 
-Clock clock;
-SevSeg sevseg;
 
-enum DisplayState {
-  DisplayClock,
-  DisplayAlarmStatus,
-  DisplayAlarmTime,
-  DisplayAlarmActive,
-  DisplaySnooze,
-};
+//  RTC and LCD initialization
+ RTC_DS1307 rtc;  
+ LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-DisplayState displayState = DisplayClock;
-long lastStateChange = 0;
 
-void changeDisplayState(DisplayState newValue) {
-  displayState = newValue;
-  lastStateChange = millis();
-}
 
-long millisSinceStateChange() {
-  return millis() - lastStateChange;
-}
 
-void setColon(bool value) {
-  digitalWrite(COLON_PIN, value ? LOW : HIGH);
-}
+// Temperature constants
+const float BETA = 3950;  // Beta coefficient for the thermistor
 
-void displayTime() {
-  DateTime now = clock.now();
-  bool blinkState = now.second() % 2 == 0;
-  sevseg.setNumber(now.hour() * 100 + now.minute());
-  setColon(blinkState);
-}
+const float R0 = 10000;   // Resistance of the thermistor at 25°C (10kΩ)
+const float T0 = 298.15;  // Reference temperature (25°C) in Kelvin
+const float VREF = 5.0;   // Reference voltage
 
-void clockState() {
-  displayTime();
+// Pin definitions
+int buzzerPin = 8;
+unsigned long previousMillis = 0;
+const long interval = 60000;
+int redPin = 11;
+int greenPin = 12;
 
-  
-  
-}
 
-void alarmStatusState() {
-  setColon(false);
-  sevseg.setChars(clock.alarmEnabled() ? " on" : " off");
-  if (millisSinceStateChange() > ALARM_STATUS_DISPLAY_TIME) {
-    changeDisplayState(clock.alarmEnabled() ? DisplayAlarmTime : DisplayClock);
-    return;
-  }
-}
 
-// void alarmTimeState() {
-//   DateTime alarm = clock.alarmTime();
-//   sevseg.setNumber(alarm.hour() * 100 + alarm.minute(), -1);
 
-//   if (millisSinceStateChange() > ALARM_HOUR_DISPLAY_TIME || alarmButton.pressed()) {
-//     changeDisplayState(DisplayClock);
-//     return;
-//   }
 
-//   if (hourButton.pressed()) {
-//     clock.incrementAlarmHour();
-//     lastStateChange = millis();
-//   }
-//   if (minuteButton.pressed()) {
-//     clock.incrementAlarmMinute();
-//     lastStateChange = millis();
-//   }
-//   if (alarmButton.pressed()) {
-//     changeDisplayState(DisplayClock);
-//   }
-// }
-
-void alarmState() {
-  displayTime();
-
-  // if (alarmButton.read() == Button::RELEASED) {
-  //   alarmTone.play();
-  // }
-  // if (alarmButton.pressed()) {
-  //   alarmTone.stop();
-  // }
-  // if (alarmButton.released()) {
-  //   alarmTone.stop();
-  //   bool longPress = alarmButton.repeat_count() > 0;
-  //   if (longPress) {
-  //     clock.stopAlarm();
-  //     changeDisplayState(DisplayClock);
-  //   } else {
-  //     clock.snooze();
-  //     changeDisplayState(DisplaySnooze);
-  //   }
-  // }
-}
-
-void snoozeState() {
-  sevseg.setChars("****");
-  if (millisSinceStateChange() > SNOOZE_DISPLAY_TIME) {
-    changeDisplayState(DisplayClock);
-    return;
-  }
-}
 
 void setup() {
-  Serial.begin(115200);
-
-  clock.begin();
 
 
-  pinMode(COLON_PIN, OUTPUT);
 
-  byte digits = 4;
-  byte digitPins[] = {2, 3, 4, 5};
-  byte segmentPins[] = {6, 7, 8, 9, 10, 11, 12};
-  bool resistorsOnSegments = false;
-  bool updateWithDelays = false;
-  bool leadingZeros = true;
-  bool disableDecPoint = true;
-  sevseg.begin(DISPLAY_TYPE, digits, digitPins, segmentPins, resistorsOnSegments,
-               updateWithDelays, leadingZeros, disableDecPoint);
-  sevseg.setBrightness(90);
+
+
+   pinMode(redPin, OUTPUT);
+    pinMode(buzzerPin, OUTPUT);
+    pinMode(greenPin, OUTPUT);
+    pinMode(COLON_PIN, OUTPUT);
+
+    // Initialize LCD
+    lcd.init();
+    lcd.backlight();
+
+    // Initialize RTC
+    if (!rtc.begin()) {
+        Serial.println("Couldn't find RTC");
+        while (1); // Halt execution
+    }
+
+
+
+ clock.begin();
+  setupDisplay();
 }
 
 void loop() {
@@ -146,7 +72,40 @@ void loop() {
       clockState();
       break;
 
+     int analogValue = analogRead(A0);
+    float voltage = (analogValue / 1023.0) * VREF;  // Convert ADC value to voltage
+   float resistance = (VREF / voltage - 1) * R0;  // Calculate resistance
+     float temperatureK = 1 / (log(resistance / R0) / BETA + 1 / T0);
+  float temperatureC = temperatureK - 273.15;
 
+     Serial.print("Temperature: ");
+    Serial.println(temperatureC);
+
+    // Temperature-based control
+    unsigned long currentMillis = millis();
+    if (temperatureC >= 26) {
+        digitalWrite(redPin, HIGH);
+        digitalWrite(greenPin, LOW);
+
+        if (currentMillis - previousMillis >= interval) {
+            previousMillis = currentMillis;
+            tone(buzzerPin, 1000);
+            delay(500);
+            noTone(buzzerPin);
+        }
+
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Too hot! Temp:");
+     
+    } else {
+        digitalWrite(redPin, LOW);
+        digitalWrite(greenPin, HIGH);
+
+    }
+
+
+     delay(2000); // Delay to update LCD less frequently
 
 
 

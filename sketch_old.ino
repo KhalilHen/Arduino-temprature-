@@ -13,26 +13,9 @@
 // // RTC and LCD initialization
 // RTC_DS1307 rtc;
 // LiquidCrystal_I2C lcd(0x27, 16, 2);
-// SevSeg sevseg;
-// Clock clock;
 
-// // Pin definitions
-// const int COLON_PIN = 13;
-// const uint8_t digitPins[] = {2, 3, 4, 5}; // Pins connected to each digit's common pin
-// const uint8_t segmentPins[] = {6, 7, 8, 9, 10, 11, 12}; // Pins connected to segments a-g
 
-// const byte digitPatterns[] = {
-//   0b00111111, // 0
-//   0b00000110, // 1
-//   0b01011011, // 2
-//   0b01001111, // 3
-//   0b01100110, // 4
-//   0b01101101, // 5
-//   0b01111101, // 6
-//   0b00000111, // 7
-//   0b01111111, // 8
-//   0b01101111  // 9
-// };
+
 
 // // Temperature constants
 // const float BETA = 3950;  // Beta coefficient for the thermistor
@@ -50,60 +33,6 @@
 
 
 
-// //Einde code kopie van example projec
-// // 
-
-// // 
-
-// enum DisplayState {
-//   DisplayClock,
-//   DisplayAlarmStatus,
-//   DisplayAlarmTime,
-//   DisplayAlarmActive,
-//   DisplaySnooze,
-// };
-
-
-
-
-
-// void setColon(bool value) {
-//   digitalWrite(COLON_PIN, value ? LOW : HIGH);
-// }
-
-// void displayTime() {
-//   DateTime now = clock.now();
-//   bool blinkState = now.second() % 2 == 0;
-//   sevseg.setNumber(now.hour() * 100 + now.minute());
-//   setColon(blinkState);
-// }
-
-
-// void clockState() {
-//   displayTime();
-
-//   if (alarmButton.read() == Button::RELEASED && clock.alarmActive()) {
-//     // Read alarmButton has_changed() to clear its state
-//     alarmButton.has_changed();
-//     changeDisplayState(DisplayAlarmActive);
-//     return;
-//   }
-
-//   if (hourButton.pressed()) {
-//     clock.incrementHour();
-//   }
-//   if (minuteButton.pressed()) {
-//     clock.incrementMinute();
-//   }
-//   if (alarmButton.pressed()) {
-//     clock.toggleAlarm();
-//     changeDisplayState(DisplayAlarmStatus);
-//   }
-// }
-
-
-
-// //Einde code kopie van example project
 
 
 
@@ -123,11 +52,6 @@
 
 
 
-// void setup() {
-//     Serial.begin(9600);
-
-// // Code example project
-//   clock.begin();
 
 
 
@@ -135,27 +59,9 @@
 
 
 
-//   byte digits = 4;
-//   byte digitPins[] = {2, 3, 4, 5};
-//   byte segmentPins[] = {6, 7, 8, 9, 10, 11, 12};
-//   bool resistorsOnSegments = false;
-//   bool updateWithDelays = false;
-//   bool leadingZeros = true;
-//   bool disableDecPoint = true;
-//   sevseg.begin(DISPLAY_TYPE, digits, digitPins, segmentPins, resistorsOnSegments,
-//                updateWithDelays, leadingZeros, disableDecPoint);
-//   sevseg.setBrightness(90);
-// // end of code example project
 
 
 
-//     // Set pin modes for 7-segment display
-//     for (int i = 0; i < 7; i++) {
-//         pinMode(segmentPins[i], OUTPUT);
-//     }
-//     for (int i = 0; i < 4; i++) {
-//         pinMode(digitPins[i], OUTPUT);
-//     }
 
 //     pinMode(redPin, OUTPUT);
 //     pinMode(buzzerPin, OUTPUT);
@@ -172,31 +78,14 @@
 //         while (1); // Halt execution
 //     }
 
-//     // Initialize 7-segment display
-//     // bool resistorsOnSegments = false;
-//     // bool updateWithDelays = false;
-//     // bool leadingZeros = true;
-//     // bool disableDecPoint = true;
-//     // sevseg.begin(COMMON_ANODE, 4, digitPins, segmentPins, resistorsOnSegments, updateWithDelays, leadingZeros, disableDecPoint);
-//     // sevseg.setBrightness(90);
-// }
+
 
 // void loop() {
 
 //     sevseg.refreshDisplay();
 
 
-//   switch (displayState) {
-//     case DisplayClock:
-//       clockState();
-//       break;
 
-
-
-
-    
-
-//   }
 
 
 //     // Temperature monitoring
