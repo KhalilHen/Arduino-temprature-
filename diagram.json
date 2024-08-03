@@ -35,13 +35,6 @@
       "attrs": { "volume": "0.1" }
     },
     {
-      "type": "wokwi-rgb-led",
-      "id": "rgb2",
-      "top": -533.6,
-      "left": -152.5,
-      "attrs": { "common": "cathode" }
-    },
-    {
       "type": "wokwi-resistor",
       "id": "r3",
       "top": -379.2,
@@ -92,10 +85,8 @@
     [ "bb1:bn.4", "bb1:4b.j", "green", [ "h0" ] ],
     [ "rgb1:R", "bb1:16b.i", "green", [ "v0" ] ],
     [ "rgb1:COM", "bb1:4b.f", "green", [ "v-29.2", "h76.9" ] ],
-    [ "rgb2:COM", "bb1:4b.g", "green", [ "v0" ] ],
     [ "bb1:bn.46", "bb1:57b.j", "green", [ "h0" ] ],
     [ "bb1:bp.47", "bb1:58b.j", "green", [ "h0" ] ],
-    [ "rgb2:G", "r3:1", "green", [ "v0" ] ],
     [ "lcd1:GND", "bb1:45b.f", "limegreen", [ "h0" ] ],
     [ "lcd1:VCC", "bb1:46b.f", "red", [ "h0" ] ],
     [ "bb1:bn.36", "bb1:45b.j", "green", [ "h0" ] ],
@@ -106,7 +97,6 @@
     [ "mega1:5V", "bb1:bp.1", "red", [ "h-27.3", "v-173.7", "h249.6" ] ],
     [ "mega1:GND.2", "bb1:bn.1", "green", [ "h233.1", "v107.75", "h268.8", "v19.2" ] ],
     [ "mega1:12", "bb1:8t.e", "gold", [ "h76.8", "v192", "h192", "v28.8" ] ],
-    [ "mega1:13", "bb1:22b.j", "orange", [ "h19.2", "v249" ] ],
     [ "mega1:8", "bb1:57b.i", "orange", [ "h9.6", "v690.6" ] ],
     [ "lcd1:SDA", "mega1:20", "gold", [ "h-556.8", "v-191.8", "h-182.4", "v-211.2" ] ],
     [ "lcd1:SCL", "mega1:21", "gold", [ "h-700.8", "v-114.9" ] ],
@@ -139,7 +129,9 @@
     [ "sevseg1:E", "mega1:A10", "white", [ "v37.56", "h-172.79", "v326.4", "h-240", "v-76.8" ] ],
     [ "sevseg1:F", "mega1:A11", "white", [ "v0" ] ],
     [ "sevseg1:G", "mega1:A12", "white", [ "v0" ] ],
-    [ "sevseg1:A", "mega1:A6", "white", [ "v-67.2", "h-499.2", "v364.8" ] ]
+    [ "sevseg1:A", "mega1:A6", "white", [ "v-67.2", "h-499.2", "v364.8" ] ],
+    [ "mega1:11", "bb1:22b.j", "green", [ "h38.4", "v18.8" ] ],
+    [ "rgb1:G", "bb1:2t.c", "green", [ "v0" ] ]
   ],
   "dependencies": {}
 }
