@@ -13,7 +13,7 @@ extern SevSeg sevseg;
 
 enum DisplayState {
   DisplayClock,
-  DisplaySnooze,
+  DisplayTemperature,
 };
 
 extern DisplayState displayState;
@@ -24,7 +24,7 @@ long millisSinceStateChange();
 void setColon(bool value);
 void displayTime();
 void clockState();
-void alarmState();
 void setupDisplay();
+void displayTemperature();
 
 #endif // DISPLAYCONTROL_H

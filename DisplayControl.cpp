@@ -1,5 +1,5 @@
 #include "DisplayControl.h"
-
+#include ''a
 Clock clock;
 SevSeg sevseg;
 
@@ -30,9 +30,7 @@ void clockState() {
   displayTime();
 }
 
-void alarmState() {
-  displayTime();
-}
+
 
 void setupDisplay() {
   pinMode(COLON_PIN, OUTPUT);
@@ -47,4 +45,12 @@ void setupDisplay() {
   sevseg.begin(DISPLAY_TYPE, digits, digitPins, segmentPins, resistorsOnSegments,
                updateWithDelays, leadingZeros, disableDecPoint);
   sevseg.setBrightness(90);
+}
+
+
+void displayTemperature() {
+  // Assuming you have a function or variable that provides the temperature
+  float temperature = getTemperature(); // Replace with actual temperature retrieval
+  sevseg.setNumber(temperature * 10); // Display temperature with 1 decimal place
+  setColon(false); // No need for colon in temperature display
 }
