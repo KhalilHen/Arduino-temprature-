@@ -30,7 +30,7 @@
       "type": "wokwi-buzzer",
       "id": "bz1",
       "top": 93.3,
-      "left": 33.3,
+      "left": -149.1,
       "rotate": 90,
       "attrs": { "volume": "0.1" }
     },
@@ -130,7 +130,9 @@
     [ "sevseg1:F", "mega1:11", "green", [ "v0" ] ],
     [ "sevseg1:G", "mega1:12", "green", [ "v0" ] ],
     [ "sevseg1:CLN", "mega1:13", "green", [ "h9.6", "v-57.6" ] ],
-    [ "sevseg1:COM", "mega1:5V.2", "green", [ "v0" ] ]
+    [ "sevseg1:COM", "mega1:5V.2", "green", [ "v0" ] ],
+    [ "bz1:1", "bb1:57b.f", "", [ "$bb" ] ],
+    [ "bz1:2", "bb1:58b.f", "", [ "$bb" ] ]
   ],
   "dependencies": {}
 }

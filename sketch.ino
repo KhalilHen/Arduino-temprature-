@@ -7,7 +7,7 @@
 
 #include <LiquidCrystal_I2C.h>
 #include <RTClib.h> 
-#include <Wire.h>
+// #include <Wire.h>
 
 
 
@@ -16,6 +16,8 @@
  LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 
+enum DisplayState { DisplayClock, DisplayTemperature };
+DisplayState displayState = DisplayClock;
 
 
 // Temperature constants
@@ -48,6 +50,7 @@ void setup() {
     pinMode(greenPin, OUTPUT);
     pinMode(COLON_PIN, OUTPUT);
 
+Serial.begin(9600);
     // Initialize LCD
     lcd.init();
     lcd.backlight();
@@ -65,14 +68,22 @@ void setup() {
 }
 
 void loop() {
+
+
+
   sevseg.refreshDisplay();
 
   switch (displayState) {
     case DisplayClock:
       clockState();
-      break;
 
-     int analogValue = analogRead(A0);
+      delay(2000);
+       displayState = DisplayTemperatureText; 
+      break;
+      case DisplayTemperatureText:
+
+      
+  int analogValue = analogRead(A0);
     float voltage = (analogValue / 1023.0) * VREF;  // Convert ADC value to voltage
    float resistance = (VREF / voltage - 1) * R0;  // Calculate resistance
      float temperatureK = 1 / (log(resistance / R0) / BETA + 1 / T0);
@@ -97,11 +108,16 @@ void loop() {
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("Too hot! Temp:");
+                lcd.setCursor(0, 1);
+        lcd.print("Find some coolness");
+
      
     } else {
         digitalWrite(redPin, LOW);
         digitalWrite(greenPin, HIGH);
-
+   lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Normal temperature");
     }
 
 
@@ -109,6 +125,11 @@ void loop() {
 
 
 
-   
+   DisplayTemperatureText = DisplayClock;
+
+      }
+      default: break; 
   }
+   
+  
 }
