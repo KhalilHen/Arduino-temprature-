@@ -1,58 +1,27 @@
-#include <LiquidCrystal_I2C.h>
-#include <RTClib.h>
-#include <Wire.h>
-#include <SevSeg.h>
+/**
+   Arduino Digital Alarm Clock
 
+   Copyright (C) 2020, Uri Shaked.
+   Released under the MIT License.
+
+*/
+
+#include <SevSeg.h>
+#include "Button.h"
+#include "AlarmTone.h"
 #include "Clock.h"
 #include "config.h"
 
-
-
-
-
-// RTC and LCD initialization
-RTC_DS1307 rtc;
-LiquidCrystal_I2C lcd(0x27, 16, 2);
-SevSeg sevseg;
-
-// Pin definitions
 const int COLON_PIN = 13;
-const uint8_t digitPins[] = {2, 3, 4, 5}; // Pins connected to each digit's common pin
-const uint8_t segmentPins[] = {6, 7, 8, 9, 10, 11, 12}; // Pins connected to segments a-g
+// const int SPEAKER_PIN = A3;
 
-const byte digitPatterns[] = {
-  0b00111111, // 0
-  0b00000110, // 1
-  0b01011011, // 2
-  0b01001111, // 3
-  0b01100110, // 4
-  0b01101101, // 5
-  0b01111101, // 6
-  0b00000111, // 7
-  0b01111111, // 8
-  0b01101111  // 9
-};
+// Button hourButton(A0);
+// Button minuteButton(A1);
+// Button alarmButton(A2);
 
-// Temperature constants
-const float BETA = 3950;  // Beta coefficient for the thermistor
-const float R0 = 10000;   // Resistance of the thermistor at 25°C (10kΩ)
-const float T0 = 298.15;  // Reference temperature (25°C) in Kelvin
-const float VREF = 5.0;   // Reference voltage
-
-// Pin definitions
-int buzzerPin = 8;
-unsigned long previousMillis = 0;
-const long interval = 60000;
-int redPin = 11;
-int greenPin = 12;
-
-
-
-
-//Einde code kopie van example projec
-// 
-
-// 
+// AlarmTone alarmTone;
+Clock clock;
+SevSeg sevseg;
 
 enum DisplayState {
   DisplayClock,
@@ -62,7 +31,13 @@ enum DisplayState {
   DisplaySnooze,
 };
 
+DisplayState displayState = DisplayClock;
+long lastStateChange = 0;
 
+// void changeDisplayState(DisplayState newValue) {
+//   displayState = newValue;
+//   lastStateChange = millis();
+// }
 
 long millisSinceStateChange() {
   return millis() - lastStateChange;
@@ -79,129 +54,141 @@ void displayTime() {
   setColon(blinkState);
 }
 
+// void clockState() {
+//   displayTime();
 
+//   if (alarmButton.read() == Button::RELEASED && clock.alarmActive()) {
+//     // Read alarmButton has_changed() to clear its state
+//     alarmButton.has_changed();
+//     changeDisplayState(DisplayAlarmActive);
+//     return;
+//   }
 
+//   if (hourButton.pressed()) {
+//     clock.incrementHour();
+//   }
+//   if (minuteButton.pressed()) {
+//     clock.incrementMinute();
+//   }
+//   if (alarmButton.pressed()) {
+//     clock.toggleAlarm();
+//     changeDisplayState(DisplayAlarmStatus);
+//   }
+// }
 
-void alarmTimeState() {
-  DateTime alarm = clock.alarmTime();
-  sevseg.setNumber(alarm.hour() * 100 + alarm.minute(), -1);
+// void alarmStatusState() {
+//   setColon(false);
+//   sevseg.setChars(clock.alarmEnabled() ? " on" : " off");
+//   if (millisSinceStateChange() > ALARM_STATUS_DISPLAY_TIME) {
+//     changeDisplayState(clock.alarmEnabled() ? DisplayAlarmTime : DisplayClock);
+//     return;
+//   }
+// }
 
-  if (millisSinceStateChange() > ALARM_HOUR_DISPLAY_TIME || alarmButton.pressed()) {
-    changeDisplayState(DisplayClock);
-    return;
-  }
+// void alarmTimeState() {
+//   DateTime alarm = clock.alarmTime();
+//   sevseg.setNumber(alarm.hour() * 100 + alarm.minute(), -1);
 
-  if (hourButton.pressed()) {
-    clock.incrementAlarmHour();
-    lastStateChange = millis();
-  }
-  if (minuteButton.pressed()) {
-    clock.incrementAlarmMinute();
-    lastStateChange = millis();
-  }
-  if (alarmButton.pressed()) {
-    changeDisplayState(DisplayClock);
-  }
-}
+//   if (millisSinceStateChange() > ALARM_HOUR_DISPLAY_TIME || alarmButton.pressed()) {
+//     changeDisplayState(DisplayClock);
+//     return;
+//   }
 
+//   if (hourButton.pressed()) {
+//     clock.incrementAlarmHour();
+//     lastStateChange = millis();
+//   }
+//   if (minuteButton.pressed()) {
+//     clock.incrementAlarmMinute();
+//     lastStateChange = millis();
+//   }
+//   if (alarmButton.pressed()) {
+//     changeDisplayState(DisplayClock);
+//   }
+// }
 
-//Einde code kopie van example project
+// void alarmState() {
+//   displayTime();
 
+  // if (alarmButton.read() == Button::RELEASED) {
+  //   alarmTone.play();
+  // }
+  // if (alarmButton.pressed()) {
+  //   alarmTone.stop();
+  // }
+  // if (alarmButton.released()) {
+  //   alarmTone.stop();
+  //   bool longPress = alarmButton.repeat_count() > 0;
+  //   if (longPress) {
+  //     clock.stopAlarm();
+  //     changeDisplayState(DisplayClock);
+  //   } else {
+  //     clock.snooze();
+  //     changeDisplayState(DisplaySnooze);
+  //   }
+  // }
+// }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// void snoozeState() {
+//   sevseg.setChars("****");
+//   if (millisSinceStateChange() > SNOOZE_DISPLAY_TIME) {
+//     changeDisplayState(DisplayClock);
+//     return;
+//   }
+// }
 
 void setup() {
-    Serial.begin(9600);
+  Serial.begin(115200);
 
-    // Set pin modes for 7-segment display
-    for (int i = 0; i < 7; i++) {
-        pinMode(segmentPins[i], OUTPUT);
-    }
-    for (int i = 0; i < 4; i++) {
-        pinMode(digitPins[i], OUTPUT);
-    }
+  clock.begin();
 
-    pinMode(redPin, OUTPUT);
-    pinMode(buzzerPin, OUTPUT);
-    pinMode(greenPin, OUTPUT);
-    pinMode(COLON_PIN, OUTPUT);
+  // hourButton.begin();
+  // hourButton.set_repeat(500, 200);
 
-    // Initialize LCD
-    lcd.init();
-    lcd.backlight();
+  // minuteButton.begin();
+  // minuteButton.set_repeat(500, 200);
 
-    // Initialize RTC
-    if (!rtc.begin()) {
-        Serial.println("Couldn't find RTC");
-        while (1); // Halt execution
-    }
+  // alarmButton.begin();
+  // alarmButton.set_repeat(1000, -1);
 
-    // Initialize 7-segment display
-    bool resistorsOnSegments = false;
-    bool updateWithDelays = false;
-    bool leadingZeros = true;
-    bool disableDecPoint = true;
-    sevseg.begin(COMMON_ANODE, 4, digitPins, segmentPins, resistorsOnSegments, updateWithDelays, leadingZeros, disableDecPoint);
-    sevseg.setBrightness(90);
+  // alarmTone.begin(SPEAKER_PIN);
+
+  pinMode(COLON_PIN, OUTPUT);
+
+  byte digits = 4;
+  byte digitPins[] = {2, 3, 4, 5};
+  byte segmentPins[] = {6, 7, 8, 9, 10, 11, 12};
+  bool resistorsOnSegments = false;
+  bool updateWithDelays = false;
+  bool leadingZeros = true;
+  bool disableDecPoint = true;
+  sevseg.begin(DISPLAY_TYPE, digits, digitPins, segmentPins, resistorsOnSegments,
+               updateWithDelays, leadingZeros, disableDecPoint);
+  sevseg.setBrightness(90);
 }
 
 void loop() {
-
-  
-
-
-    // Temperature monitoring
-    int analogValue = analogRead(A0);
-    float voltage = (analogValue / 1023.0) * VREF;  // Convert ADC value to voltage
-    float resistance = (VREF / voltage - 1) * R0;  // Calculate resistance
-    float temperatureK = 1 / (log(resistance / R0) / BETA + 1 / T0);
-    float temperatureC = temperatureK - 273.15;
-
-    Serial.print("Temperature: ");
-    Serial.println(temperatureC);
-
-    // Temperature-based control
-    unsigned long currentMillis = millis();
-    if (temperatureC >= 26) {
-        digitalWrite(redPin, HIGH);
-        digitalWrite(greenPin, LOW);
-
-        if (currentMillis - previousMillis >= interval) {
-            previousMillis = currentMillis;
-            tone(buzzerPin, 1000);
-            delay(500);
-            noTone(buzzerPin);
-        }
-
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("Too hot! Temp:");
-     
-    } else {
-        digitalWrite(redPin, LOW);
-        digitalWrite(greenPin, HIGH);
-
-    }
-
-
   sevseg.refreshDisplay();
 
-    delay(2000); // Delay to update LCD less frequently
+  // switch (displayState) {
+  //   case DisplayClock:
+  //     clockState();
+  //     break;
+
+    // case DisplayAlarmStatus:
+    //   alarmStatusState();
+    //   break;
+
+    // case DisplayAlarmTime:
+    //   alarmTimeState();
+    //   break;
+
+    // case DisplayAlarmActive:
+    //   alarmState();
+    //   break;
+
+    // case DisplaySnooze:
+    //   snoozeState();
+    //   break;
+  // }
 }
-
-
