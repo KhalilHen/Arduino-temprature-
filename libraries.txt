@@ -9,4 +9,3 @@ jm_LiquidCrystal_I2C
 LiquidCrystal I2C
 RTClib
 SevSeg
-7Segment
