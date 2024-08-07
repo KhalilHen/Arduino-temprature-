@@ -98,20 +98,20 @@ void loop() {
 
 
 //tempory not using
-  // sevseg.refreshDisplay();
+  sevseg.refreshDisplay();
 
 
 
-//   switch (displayState) {
-//     case DisplayClock:
-//       clockState();
-//       delay(5000);
+  switch (displayState) {
+    case DisplayClock:
+      clockState();
+      delay(5000);
 
-//             changeDisplayState(DisplayTemperature);
+            changeDisplayState(DisplayTemperature);
 
-//       break;
+      break;
 
-// }
+}
     
     unsigned long currentMillis = millis();
 
