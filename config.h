@@ -20,29 +20,5 @@
 */
 #define DISPLAY_TYPE COMMON_ANODE
 
-/**
-   For how long should we show the alarm status (on/off)?
-*/
-const int ALARM_STATUS_DISPLAY_TIME = 1000; /* ms */
-
-/**
-   For how long should we show the alarm hour?
-*/
-const int ALARM_HOUR_DISPLAY_TIME = 2500; /* ms */
-
-/**
-   For how long should we display the snooze screen?
-*/
-const int SNOOZE_DISPLAY_TIME = 500; /* ms */
-
-/**
-   How many minutes to snooze the alarm for?
-*/
-const int SNOOZE_TIME = 9; /* minutes */
-
-/**
-   The default Alarm hour (for non-RTC mode)
-*/
-const int DEFAULT_ALARM_HOUR = 9;
 
 #endif /* __CONFIG_H__ */
