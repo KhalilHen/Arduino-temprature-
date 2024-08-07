@@ -79,6 +79,13 @@
       "left": -134.95,
       "rotate": 90,
       "attrs": { "value": "0" }
+    },
+    {
+      "type": "wokwi-slide-potentiometer",
+      "id": "pot1",
+      "top": -523,
+      "left": -29.8,
+      "attrs": { "travelLength": "30" }
     }
   ],
   "connections": [
@@ -135,7 +142,14 @@
     [ "bb1:22b.j", "mega1:22", "green", [ "h0" ] ],
     [ "rgb1:G", "bb1:15t.e", "green", [ "v0" ] ],
     [ "bb1:21t.e", "mega1:24", "green", [ "h-316.8", "v-48", "h-384", "v-134.4" ] ],
-    [ "btn1:2.r", "mega1:28", "blue", [ "h-28.6", "v403.4", "h-950.4", "v-624", "h67.2" ] ]
+    [ "btn1:2.r", "mega1:28", "blue", [ "h-28.6", "v403.4", "h-950.4", "v-624", "h67.2" ] ],
+    [ "mega1:5V.1", "bb1:tp.1", "red", [ "v65", "h-260.2", "v-566.4", "h748.8" ] ],
+    [ "bb1:tp.2", "bb1:1t.a", "red", [ "h-19.5", "v-39.2" ] ],
+    [ "pot1:VCC", "bb1:1t.b", "red", [ "v-28.8", "h-67.2" ] ],
+    [ "mega1:GND.3", "bb1:tn.5", "black", [ "h-150.9", "v-410.55", "h1324.8", "v624" ] ],
+    [ "bb1:tn.4", "bb1:6t.b", "green", [ "h0" ] ],
+    [ "pot1:GND", "bb1:6t.e", "black", [ "v-5.2", "h-115.2", "v201.6" ] ],
+    [ "pot1:SIG", "mega1:A1", "violet", [ "v0", "h-605.6", "v163.2", "h-518.4", "v-144" ] ]
   ],
   "dependencies": {}
 }
