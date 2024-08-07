@@ -35,9 +35,9 @@ const float VREF = 5.0;   // Reference voltage
 // Pin definitions
 int buzzerPin = 41;
 unsigned long previousMillis = 0;
-const long interval = 60000;
+const long interval = 2000;
 int redPin = 22;
-int greenPin = 23;
+int greenPin = 24;
 
 // float temperatureC = 0; 
 
@@ -49,10 +49,10 @@ void setup() {
 
 
 
+    pinMode(greenPin, OUTPUT);
 
    pinMode(redPin, OUTPUT);
     pinMode(buzzerPin, OUTPUT);
-    pinMode(greenPin, OUTPUT);
     pinMode(COLON_PIN, OUTPUT);
 
 pinMode(buttonPin, INPUT_PULLUP);
@@ -79,6 +79,7 @@ void loop() {
 
  if(buttonValue != oldButtonValue)
   {
+    Serial.println(buttonValue);
     delay(50);
    buttonValue = digitalRead(buttonPin);
     if(buttonValue == LOW)
@@ -127,13 +128,11 @@ void loop() {
   // Convert temperature from Kelvin to Celsius
   float temperatureC = temperatureK - 273.15;
 
-  Serial.print("Temperature:");
-  Serial.println(temperatureC);
 
 
  if (temperatureC  >= 26 ) {
 
-
+ 
   digitalWrite(redPin, HIGH);
  digitalWrite(greenPin, LOW);
 
@@ -141,6 +140,15 @@ void loop() {
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
 
+
+if(turnOffBeep) {
+
+      Serial.println("Beep turned off");
+
+      digitalWrite(redPin, HIGH);
+      digitalWrite(greenPin, HIGH);
+    
+}
 if(!turnOffBeep ) {
 
     tone(buzzerPin, 1000); 
@@ -148,7 +156,9 @@ if(!turnOffBeep ) {
     noTone(buzzerPin);
 
     }
+
   }
+
    lcd.setCursor(0, 0);
     lcd.print("It's too hot!!");
     lcd.setCursor(0, 1);
